@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input class="form-control" id="Generate-Pin" type="text">
+                    <button class="generate-btn" id="Generate-Button">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input class="form-control" id="Match-Pin" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                                <div class="button number" id="7">7</div>
+                                <div class="button number" id="8">8</div>
+                                <div class="button number" id="9">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button number" id="4">4</div>
+                                <div class="button number" id="5">5</div>
+                                <div class="button number" id="6">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button number" id="1">1</div>
+                                <div class="button number" id="2">2</div>
+                                <div class="button number" id="3">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button operator" id="<">
+                                    < </div>
+                                        <div class="button number" id="0">0</div>
+                                        <div class="button operator" id="C">C</div>
+                                </div>
+                                <div>
+                                    <button type="submit" id="Submit-Button" class="submit-btn" disabled>Submit</button>
+                                    <p class="action-left">3 try left</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Notify section -->
+                <div class="notify-section">
+                    <p class="notify" id="Match-Failed">❌ Pin Didn't Match, Please try again</p>
+                    <p class="notify" id="Match-Success">✅ Pin Matched... Secret door is opening for you</p>
+                </div>
+            </div>
+
+
+
+            <script>
+                let GenerateButton = document.getElementById('Generate-Button').addEventListener('click', function () {
+                    let GeneratePin = Math.floor(1000 + Math.random() * 9000);
+                    document.getElementById('Generate-Pin').value = GeneratePin;
+                    document.getElementById('Submit-Button').disabled = false;
+                    document.getElementById('Match-Failed').style.display = 'none';
+                    document.getElementById('Match-Success').style.display = 'none';
+
+                })
+
+                // number....
+
+                const number = document.getElementsByClassName('number');
+                for (let i = 0; i < number.length; i++) {
+                    const element = number[i];
+                    element.addEventListener('click', function () {
+                        let Output = document.getElementById('Match-Pin').value;
+                        Output = Output + this.id;
+                        // console.log(Output);
+                        document.getElementById('Match-Pin').value = Output;
+                    })
+                }
+
+                // Operator....
+
+                const operator = document.getElementsByClassName('operator');
+                for (let i = 0; i < operator.length; i++) {
+                    const element = operator[i];
+                    element.addEventListener('click', function () {
+                        if (this.id == 'C') {
+                            document.getElementById('Match-Pin').value = "";
+                        }
+                        else if (this.id == '<') {
+                            let MatchPin = document.getElementById('Match-Pin').value;
+                            MatchPin = MatchPin.substr(0, MatchPin.length - 1);
+                            document.getElementById('Match-Pin').value = MatchPin;
+                        }
+                    })
+                }
+
+                // Submit Match....
+                document.getElementById('Submit-Button').addEventListener('click', function () {
+                    let GenPin = document.getElementById('Generate-Pin').value;
+                    let MatchPin = document.getElementById('Match-Pin').value;
+                    if (GenPin == MatchPin) {
+                        document.getElementById('Generate-Pin').value = "";
+                        document.getElementById('Match-Pin').value = "";
+                        document.getElementById('Submit-Button').disabled = true;
+                        document.getElementById('Match-Success').style.display = "block";
+                    }
+                    else {
+                        document.getElementById('Generate-Pin').value = "";
+                        document.getElementById('Match-Pin').value = "";
+                        document.getElementById('Submit-Button').disabled = true;
+                        document.getElementById('Match-Failed').style.display = "block";
+                    }
+                })
+
+            </script>
+</body>
+
+</html>
